@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mergeDraftWithRepository } from "../src/admin/state/adminState.js";
+import { mergeDraftWithRepository } from "../src/content-system/editing/adminDraftMerge.js";
 
 test("admin draft hydrate keeps repository works missing from an old draft", () => {
   const repository = {
