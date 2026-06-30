@@ -1,0 +1,23 @@
+{
+  "name": "ilu-creation-archive",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "validate:content": "node scripts/validate-content.mjs",
+    "test": "node --test scripts/schema.test.mjs scripts/search.test.mjs scripts/route.test.mjs scripts/reader-position.test.mjs scripts/content-protection.test.mjs scripts/public-experience.test.mjs scripts/work-editor.test.mjs scripts/admin-state.test.mjs scripts/comic-pages.test.mjs scripts/updates.test.mjs scripts/notes.test.mjs scripts/characters.test.mjs scripts/home-stats.test.mjs scripts/architecture.test.mjs scripts/local-publisher.test.mjs",
+    "check": "npm run validate:content && npm test && npm run build"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.5"
+  }
+}

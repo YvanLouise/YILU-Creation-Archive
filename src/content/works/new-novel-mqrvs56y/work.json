@@ -1,0 +1,37 @@
+{
+  "workCategory": "category-1ea67c75",
+  "slug": "new-novel-mqrvs56y",
+  "type": "小说",
+  "title": "杂文",
+  "subtitle": "",
+  "description": "杂文",
+  "cover": "./uploads/2026/06/ccef5f28-61b4-4ed2-833f-8cc30046de2b.jpg",
+  "genre": [
+    "文章",
+    "小说"
+  ],
+  "status": "筹备中",
+  "progress": "第一章",
+  "date": "2026-06-24",
+  "createdAt": "2026-06-24T09:46:18.592Z",
+  "order": 2,
+  "hidden": false,
+  "chapterStructure": {
+    "enableVolumes": true,
+    "enableSections": true,
+    "volumeLabel": "卷",
+    "chapterLabel": "章",
+    "sectionLabel": "小节"
+  },
+  "volumes": [
+    {
+      "id": "volume-mqup7opn",
+      "title": "文言文",
+      "subtitle": "",
+      "summary": "",
+      "order": 1,
+      "status": "visible",
+      "collapsed": false
+    }
+  ]
+}

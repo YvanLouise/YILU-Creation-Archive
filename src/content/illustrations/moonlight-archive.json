@@ -1,0 +1,13 @@
+{
+  "category": "封面插画",
+  "series": "月隐之誓",
+  "status": "published",
+  "featured": true,
+  "slug": "moonlight-archive",
+  "title": "月光与旧誓",
+  "summary": "月隐之誓的封面氛围稿，记录月光、城堡与旧日誓约的第一印象。",
+  "image": "./assets/moon-oath-hero.png",
+  "date": "2026-06-17",
+  "order": 1,
+  "createdAt": ""
+}

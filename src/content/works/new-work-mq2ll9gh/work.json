@@ -1,0 +1,28 @@
+{
+  "workCategory": "category-1b0f2d67",
+  "updateFrequency": "更新频率未定",
+  "readingMode": "vertical",
+  "slug": "new-work-mq2ll9gh",
+  "type": "漫画",
+  "title": "无题-1",
+  "subtitle": "  ",
+  "description": "简介",
+  "cover": "./uploads/2026/06/d963a8e2-1833-4a24-9de3-be222f8b19b3.png",
+  "genre": [
+    "日常"
+  ],
+  "status": "更新频率未定",
+  "progress": "尚未发布",
+  "date": "2026-05-04",
+  "createdAt": "2026-05-04T00:00:00.000Z",
+  "order": 1,
+  "hidden": false,
+  "chapterStructure": {
+    "enableVolumes": false,
+    "enableSections": false,
+    "volumeLabel": "卷",
+    "chapterLabel": "章",
+    "sectionLabel": "小节"
+  },
+  "volumes": []
+}

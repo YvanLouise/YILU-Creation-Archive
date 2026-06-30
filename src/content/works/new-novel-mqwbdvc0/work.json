@@ -1,0 +1,26 @@
+{
+  "workCategory": "short",
+  "slug": "new-novel-mqwbdvc0",
+  "type": "小说",
+  "title": "勇者召唤史",
+  "subtitle": "",
+  "description": "从这里填写作品简介。",
+  "cover": "./assets/moon-oath-hero.png",
+  "genre": [
+    "奇幻"
+  ],
+  "status": "筹备中",
+  "progress": "尚未发布",
+  "date": "2026-06-27",
+  "createdAt": "2026-06-27T12:09:09.701Z",
+  "order": 3,
+  "hidden": false,
+  "chapterStructure": {
+    "enableVolumes": false,
+    "enableSections": true,
+    "volumeLabel": "卷",
+    "chapterLabel": "章",
+    "sectionLabel": "小节"
+  },
+  "volumes": []
+}

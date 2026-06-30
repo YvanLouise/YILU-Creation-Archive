@@ -1,0 +1,20 @@
+node_modules/
+dist/
+.wrangler/
+.dev.vars
+worker/.dev.vars
+*.log
+admin-server.pid
+.env
+.env.local
+
+# 本地内容管理站，不发布到 GitHub Pages
+/admin.html
+/src/admin/
+/scripts/local-cms-server.mjs
+/scripts/local-admin.mjs
+/scripts/run-local-admin.ps1
+/start-admin.ps1
+/start-admin.cmd
+/worker/
+/scripts/worker.test.mjs

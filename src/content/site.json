@@ -1,0 +1,86 @@
+{
+  "showWorkbench": false,
+  "brand": {
+    "name": "伊露创作档案馆",
+    "subtitle": "原创小说 · 漫画 - 世界与故事",
+    "email": "riyaodawn@163.com",
+    "url": "https://yvanlouise.github.io/YILU-Creation-Archive/?v=224b090#/"
+  },
+  "author": {
+    "name": "伊凡露易丝",
+    "avatar": "./assets/YvanLouise头像1.png",
+    "intro": "我正在尝试创作属于自己的小说和漫画。这里会慢慢收录我的故事、角色、世界观设定和创作笔记。作品还不多，但每一篇都会认真更新。"
+  },
+  "featuredWorkSlug": "moon-oath",
+  "updatesSortMode": "createdAt",
+  "stats": [
+    {
+      "label": "正在创作",
+      "value": "1 部"
+    },
+    {
+      "label": "已发布章节",
+      "value": "3 篇"
+    },
+    {
+      "label": "角色设定",
+      "value": "2 位"
+    },
+    {
+      "label": "创作笔记",
+      "value": "4 篇"
+    }
+  ],
+  "socialLinks": [
+    {
+      "id": "link-c57fe7a7",
+      "label": "bilibili",
+      "url": "https://space.bilibili.com/190749586",
+      "enabled": true
+    },
+    {
+      "id": "link-e3de8a71",
+      "label": "爱发电",
+      "url": "https://www.ifdian.net/a/Yvanlouiseks",
+      "enabled": true
+    }
+  ],
+  "workCategories": {
+    "novel": [
+      {
+        "id": "long",
+        "label": "长篇"
+      },
+      {
+        "id": "medium",
+        "label": "中篇"
+      },
+      {
+        "id": "short",
+        "label": "短篇"
+      },
+      {
+        "id": "category-1ea67c75",
+        "label": "其他"
+      }
+    ],
+    "comic": [
+      {
+        "id": "long",
+        "label": "长篇"
+      },
+      {
+        "id": "medium",
+        "label": "中篇"
+      },
+      {
+        "id": "short",
+        "label": "短篇"
+      },
+      {
+        "id": "category-1b0f2d67",
+        "label": "其他"
+      }
+    ]
+  }
+}
