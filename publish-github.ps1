@@ -106,6 +106,38 @@ function Invoke-Git {
   Invoke-CommandCapture -Command "git" -Arguments $Arguments -FailureMessage $FailureMessage
 }
 
+function Get-GitHubFallbackIp {
+  $providers = @(
+    @{
+      Uri = "https://dns.google/resolve?name=github.com&type=A"
+      Headers = @{ Accept = "application/dns-json" }
+    },
+    @{
+      Uri = "https://cloudflare-dns.com/dns-query?name=github.com&type=A"
+      Headers = @{ Accept = "application/dns-json" }
+    }
+  )
+
+  foreach ($provider in $providers) {
+    try {
+      $response = Invoke-RestMethod `
+        -Uri $provider.Uri `
+        -Headers $provider.Headers `
+        -TimeoutSec 15
+      $address = $response.Answer |
+        Where-Object { $_.type -eq 1 -and $_.data -match "^\d{1,3}(?:\.\d{1,3}){3}$" } |
+        Select-Object -ExpandProperty data -First 1
+      if ($address) {
+        return $address
+      }
+    } catch {
+      Write-Host "GitHub DNS fallback provider is unavailable: $($_.Exception.Message)"
+    }
+  }
+
+  return ""
+}
+
 function Invoke-GitNetwork {
   param(
     [string[]]$Arguments,
@@ -117,7 +149,25 @@ function Invoke-GitNetwork {
     "-c", "http.lowSpeedLimit=1",
     "-c", "http.lowSpeedTime=$NetworkLowSpeedTime"
   ) + $Arguments
-  Invoke-CommandCapture -Command "git" -Arguments $networkArgs -FailureMessage $FailureMessage -Network
+  try {
+    return Invoke-CommandCapture -Command "git" -Arguments $networkArgs -FailureMessage $FailureMessage
+  } catch {
+    $remoteUrl = & git remote get-url $Remote 2>$null
+    if ($LASTEXITCODE -ne 0 -or $remoteUrl -notmatch "^https://github\.com/") {
+      return Invoke-CommandCapture -Command "git" -Arguments $networkArgs -FailureMessage $FailureMessage -Network
+    }
+
+    $fallbackIp = Get-GitHubFallbackIp
+    if (-not $fallbackIp) {
+      return Invoke-CommandCapture -Command "git" -Arguments $networkArgs -FailureMessage $FailureMessage -Network
+    }
+
+    Write-Host "Direct GitHub connection failed. Retrying with DNS fallback $fallbackIp."
+    $fallbackArgs = @(
+      "-c", "http.curloptResolve=github.com:443:$fallbackIp"
+    ) + $networkArgs
+    return Invoke-CommandCapture -Command "git" -Arguments $fallbackArgs -FailureMessage $FailureMessage -Network
+  }
 }
 
 function Assert-RepositoryReady {
