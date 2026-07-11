@@ -97,6 +97,13 @@ test("strips Markdown syntax and image paths", () => {
   assert.equal(result, "标题 月灯 正文");
 });
 
+test("strips novel enhanced formatting while keeping searchable text", () => {
+  const result = stripMarkdown("==重点== {{hide:秘密}} {{blur:雾中文字}}\n:::letter 来信\n钟楼见。\n:::");
+  assert.equal(result.includes("{{hide"), false);
+  assert.equal(result.includes(":::letter"), false);
+  assert.equal(result, "重点 秘密 雾中文字 来信 钟楼见。");
+});
+
 test("builds public documents without drafts or hidden works", () => {
   const documents = buildSearchDocuments(content);
   assert.deepEqual(documents.map((item) => item.slug), ["moon", "comic", "lantern", "episode", "celia", "rules", "moon-art"]);
@@ -159,6 +166,29 @@ test("chapter section bodies are searchable through their parent chapter only", 
   assert.equal(results.length, 1);
   assert.equal(results[0].kind, "chapter");
   assert.equal(results[0].slug, content.chapters[0].slug);
+});
+
+test("novel enhanced formatting text is searchable through parent chapter", () => {
+  const documents = buildSearchDocuments({
+    ...content,
+    works: [{
+      ...content.works[0],
+      chapterStructure: {
+        enableVolumes: false,
+        enableSections: false,
+        volumeLabel: "卷",
+        chapterLabel: "章",
+        sectionLabel: "小节",
+      },
+      volumes: [],
+    }],
+    chapters: [{
+      ...content.chapters[0],
+      body: "普通正文 {{hide:钟楼密钥}}\n:::notice 提示\n银色火漆\n:::",
+    }],
+  });
+  assert.equal(searchDocuments(documents, "钟楼密钥", "chapter")[0].slug, content.chapters[0].slug);
+  assert.equal(searchDocuments(documents, "银色火漆", "chapter")[0].slug, content.chapters[0].slug);
 });
 
 test("extracts a matching snippet and highlight segments", () => {

@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Maximize2 } from "lucide-react";
 import { normalizeAssetPath } from "../../content-system/model/assetPaths.js";
+import {
+  imagePresentationStyle,
+  isCustomImagePresentation,
+} from "../../shared/imagePresentation.js";
 import { useOptionalPublicExperience } from "./PublicExperience.jsx";
 import { normalizeLightboxItems } from "./domain.js";
 
@@ -10,6 +14,7 @@ export function ProtectedImage({
   className = "",
   index = 0,
   items,
+  presentation,
   priority = false,
   progressive = true,
   reveal,
@@ -19,6 +24,8 @@ export function ProtectedImage({
 }) {
   const experience = useOptionalPublicExperience();
   const imageSrc = normalizeAssetPath(src);
+  const hasPresentation = isCustomImagePresentation(presentation);
+  const presentationStyle = hasPresentation ? imagePresentationStyle(presentation) : undefined;
   const [autoRevealed, setAutoRevealed] = useState(false);
   const isRevealed = reveal ?? autoRevealed;
   const normalizedItems = (items?.length ? items : [{ src, alt, caption }]).map((item) => ({
@@ -54,7 +61,8 @@ export function ProtectedImage({
   if (progressive) {
     return (
       <span
-        className={`protected-image progressive-image${isRevealed ? " is-revealed" : ""}${wrapperClassName ? ` ${wrapperClassName}` : ""}`}
+        className={`protected-image progressive-image${isRevealed ? " is-revealed" : ""}${hasPresentation ? " has-image-presentation" : ""}${wrapperClassName ? ` ${wrapperClassName}` : ""}`}
+        style={presentationStyle}
         role={isRevealed ? undefined : "img"}
         aria-label={isRevealed ? undefined : alt}
       >
@@ -93,14 +101,20 @@ export function ProtectedImage({
 
   if (!canOpenLightbox) {
     return (
-      <span className={`protected-image${wrapperClassName ? ` ${wrapperClassName}` : ""}`}>
+      <span
+        className={`protected-image${hasPresentation ? " has-image-presentation" : ""}${wrapperClassName ? ` ${wrapperClassName}` : ""}`}
+        style={presentationStyle}
+      >
         <img className={className} src={imageSrc} alt={alt} />
       </span>
     );
   }
 
   return (
-    <span className={`protected-image${wrapperClassName ? ` ${wrapperClassName}` : ""}`}>
+    <span
+      className={`protected-image${hasPresentation ? " has-image-presentation" : ""}${wrapperClassName ? ` ${wrapperClassName}` : ""}`}
+      style={presentationStyle}
+    >
       <img className={className} src={imageSrc} alt={alt} />
       <button
         type="button"

@@ -1,0 +1,42 @@
+{
+  "workCategory": "long",
+  "slug": "new-novel-mrg5yd96",
+  "type": "小说",
+  "title": "宝藏猎人雪奈与古怪地牢",
+  "subtitle": "",
+  "description": "自称宝藏猎人的许雪奈，为寻找传闻中的宝藏独自闯入神迷山洞，却被困进一座古怪地牢。\n",
+  "cover": "./uploads/2026/07/f8cc4775-899b-4668-a094-3f7dbc46a62a.png",
+  "genre": [
+    "奇幻",
+    "搞笑"
+  ],
+  "status": "筹备中",
+  "progress": "尚未发布",
+  "date": "2026-07-11",
+  "createdAt": "2026-07-11T09:46:52.242Z",
+  "order": 1,
+  "hidden": false,
+  "chapterStructure": {
+    "enableVolumes": true,
+    "enableSections": true,
+    "volumeLabel": "卷",
+    "chapterLabel": "章",
+    "sectionLabel": "小节"
+  },
+  "volumes": [
+    {
+      "id": "volume-mrg6cq5t",
+      "title": "第 1 卷",
+      "subtitle": "",
+      "summary": "",
+      "order": 1,
+      "status": "visible",
+      "collapsed": false
+    }
+  ],
+  "coverPresentation": {
+    "focusX": 42.5638903209378,
+    "focusY": 47.375,
+    "zoom": 1.24
+  }
+}

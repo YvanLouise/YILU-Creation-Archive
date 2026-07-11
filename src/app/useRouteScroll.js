@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { readReadingPosition } from "../features/reader/readingPosition.js";
 import {
   isRestorableListRoute,
@@ -6,8 +6,10 @@ import {
   scrollStorageKey,
 } from "../site/interaction/domain.js";
 
+const useBrowserLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+
 export function useRouteScroll(route, query, anchor, navigationType) {
-  useEffect(() => {
+  useBrowserLayoutEffect(() => {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }

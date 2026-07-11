@@ -4,7 +4,7 @@ import { SiteImage } from "../interaction/SiteImage.jsx";
 export function AboutPage({ site }) {
   return (
     <main className="about-page section-shell">
-      <SiteImage src={site.author.avatar} alt="" />
+      <SiteImage src={site.author.avatar} presentation={site.author.avatarPresentation} alt="" />
       <div>
         <div className="section-label"><span />About</div>
         <h1>你好，我是{site.author.name}</h1>

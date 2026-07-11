@@ -11,7 +11,7 @@ import { updateDisplayDate } from "./domain.js";
 import { SiteImage } from "../../site/interaction/SiteImage.jsx";
 
 function UpdateVisual({ update }) {
-  if (update.image) return <SiteImage src={update.image} alt="" wrapperClassName="update-image" />;
+  if (update.image) return <SiteImage src={update.image} presentation={update.imagePresentation} alt="" wrapperClassName="update-image" />;
   const Icon =
     update.filterType === "work"
       ? BookOpen

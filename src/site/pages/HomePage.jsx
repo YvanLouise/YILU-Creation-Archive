@@ -40,7 +40,7 @@ export function HomePage({ content }) {
           </dl>
         </div>
         <div className="hero-visual">
-          <SiteImage src={work.cover} alt={`${work.title}主视觉`} priority />
+          <SiteImage src={work.cover} presentation={work.coverPresentation} alt={`${work.title}主视觉`} priority />
           <div className="cover-caption">
             <span>ILU ORIGINAL STORY</span>
             <strong>愿每一盏微光，都能照见被遗忘的名字。</strong>
@@ -51,7 +51,7 @@ export function HomePage({ content }) {
       <section className="author-band">
         <div className="section-shell author-layout">
           <div className="author-intro">
-            <SiteImage src={site.author.avatar} alt="伊露的插画头像" />
+            <SiteImage src={site.author.avatar} presentation={site.author.avatarPresentation} alt="伊露的插画头像" />
             <div>
               <div className="section-label"><span />关于创作者</div>
               <h2>你好，我是{site.author.name}</h2>

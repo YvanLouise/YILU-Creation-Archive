@@ -5,6 +5,7 @@ import {
   publishedItemsForVisibleWorks,
 } from "../../content-system/query/selectors.js";
 import { publicChapterBody } from "../../content-system/model/novelStructure.js";
+import { stripNovelFormatting } from "../markdown/novelFormatting.js";
 
 const kindLabels = {
   work: "作品",
@@ -23,7 +24,7 @@ export function normalizeSearchText(value) {
 }
 
 export function stripMarkdown(value) {
-  return String(value || "")
+  return stripNovelFormatting(value)
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/!\[([^\]]*)\]\([^)]+\)/g, " $1 ")
     .replace(/\[([^\]]+)\]\([^)]+\)/g, " $1 ")

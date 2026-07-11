@@ -27,6 +27,7 @@ function IllustrationCard({ item, group, index }) {
       <button className="illustration-card-image" type="button" onClick={open}>
         <ProtectedImage
           src={item.image}
+          presentation={item.imagePresentation}
           alt={item.title}
           caption={item.title}
           items={group}
@@ -198,6 +199,7 @@ export function IllustrationsPage({ content, queryString }) {
                 <ProtectedImage
                   wrapperClassName="illustration-featured-backdrop"
                   src={featured.image}
+                  presentation={featured.imagePresentation}
                   alt=""
                   caption=""
                   showLightboxButton={false}
@@ -206,6 +208,7 @@ export function IllustrationsPage({ content, queryString }) {
                 <ProtectedImage
                   wrapperClassName="illustration-featured-main"
                   src={featured.image}
+                  presentation={featured.imagePresentation}
                   alt={featured.title}
                   caption={featured.title}
                   items={featuredGroup}
@@ -327,7 +330,7 @@ export function IllustrationsPage({ content, queryString }) {
                 onClick={(event) => openLightbox(group, index, event.currentTarget)}
                 key={item.slug}
               >
-                <ProtectedImage src={item.image} alt={item.title} showLightboxButton={false} />
+                <ProtectedImage src={item.image} presentation={item.imagePresentation} alt={item.title} showLightboxButton={false} />
               </button>
             ))}
           </div>

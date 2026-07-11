@@ -44,6 +44,26 @@ const requiredString = (value, path, issues) => {
   if (typeof value !== "string" || !value.trim()) issues.push(`${path} 必须是非空文本`);
 };
 
+const validateImagePresentation = (value, path, issues) => {
+  if (value === undefined) return;
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    issues.push(`${path} must be an object`);
+    return;
+  }
+  for (const key of ["focusX", "focusY", "zoom"]) {
+    if (!Number.isFinite(value[key])) issues.push(`${path}.${key} must be a number`);
+  }
+  if (Number.isFinite(value.focusX) && (value.focusX < 0 || value.focusX > 100)) {
+    issues.push(`${path}.focusX must be between 0 and 100`);
+  }
+  if (Number.isFinite(value.focusY) && (value.focusY < 0 || value.focusY > 100)) {
+    issues.push(`${path}.focusY must be between 0 and 100`);
+  }
+  if (Number.isFinite(value.zoom) && (value.zoom < 1 || value.zoom > 3)) {
+    issues.push(`${path}.zoom must be between 1 and 3`);
+  }
+};
+
 const validateSlug = (value, path, issues) => {
   requiredString(value, path, issues);
   if (typeof value === "string" && !slugPattern.test(value)) {
@@ -202,6 +222,7 @@ export const siteConfigSchema = resultFrom((value) => {
   if (value.brand?.url !== undefined) validateExternalUrl(value.brand.url, "brand.url", issues);
   requiredString(value.author?.name, "author.name", issues);
   requiredString(value.author?.intro, "author.intro", issues);
+  validateImagePresentation(value.author?.avatarPresentation, "author.avatarPresentation", issues);
   validateSlug(value.featuredWorkSlug, "featuredWorkSlug", issues);
   if (!Array.isArray(value.stats)) issues.push("stats 必须是数组");
   if (!updateSortModes.has(value.updatesSortMode)) {
@@ -233,6 +254,7 @@ export const workSchema = resultFrom((value) => {
   if (typeof value.subtitle !== "string") issues.push("work.subtitle 必须是文本");
   requiredString(value.description, "work.description", issues);
   requiredString(value.cover, "work.cover", issues);
+  validateImagePresentation(value.coverPresentation, "work.coverPresentation", issues);
   requiredString(value.status, "work.status", issues);
   requiredString(value.progress, "work.progress", issues);
   if (!isValidDate(value.date)) issues.push("work.date 必须是 YYYY-MM-DD 日期");
@@ -270,6 +292,7 @@ export const illustrationSchema = resultFrom((value) => {
   requiredString(value.title, "illustration.title", issues);
   requiredString(value.summary, "illustration.summary", issues);
   requiredString(value.image, "illustration.image", issues);
+  validateImagePresentation(value.imagePresentation, "illustration.imagePresentation", issues);
   requiredString(value.category, "illustration.category", issues);
   if (typeof value.series !== "string") issues.push("illustration.series 必须是文本");
   if (!isValidDate(value.date)) issues.push("illustration.date 必须是 YYYY-MM-DD 日期");
@@ -389,6 +412,7 @@ export const markdownMetaSchema = resultFrom((value) => {
   if (value.relatedWork !== undefined && typeof value.relatedWork !== "string") {
     issues.push("relatedWork 必须是文本");
   }
+  validateImagePresentation(value.coverPresentation, "coverPresentation", issues);
   for (const field of ["role", "affiliation", "profileStatus"]) {
     if (value[field] !== undefined && typeof value[field] !== "string") {
       issues.push(`${field} 必须是文本`);
@@ -423,6 +447,9 @@ export const markdownMetaSchema = resultFrom((value) => {
         if (entry[key] !== undefined && typeof entry[key] !== "string") {
           issues.push(`${field}[${index}].${key} 必须是文本`);
         }
+      }
+      if (field === "abilities" || field === "gallery") {
+        validateImagePresentation(entry.imagePresentation, `${field}[${index}].imagePresentation`, issues);
       }
     }
   }

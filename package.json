@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "validate:content": "node scripts/validate-content.mjs",
-    "test": "node --test scripts/schema.test.mjs scripts/search.test.mjs scripts/route.test.mjs scripts/reader-position.test.mjs scripts/content-protection.test.mjs scripts/public-experience.test.mjs scripts/work-editor.test.mjs scripts/admin-state.test.mjs scripts/comic-pages.test.mjs scripts/updates.test.mjs scripts/notes.test.mjs scripts/characters.test.mjs scripts/home-stats.test.mjs scripts/architecture.test.mjs scripts/local-publisher.test.mjs",
+    "test": "node --test scripts/schema.test.mjs scripts/markdown-formatting.test.mjs scripts/search.test.mjs scripts/route.test.mjs scripts/reader-position.test.mjs scripts/content-protection.test.mjs scripts/public-experience.test.mjs scripts/work-editor.test.mjs scripts/admin-state.test.mjs scripts/comic-pages.test.mjs scripts/updates.test.mjs scripts/notes.test.mjs scripts/characters.test.mjs scripts/home-stats.test.mjs scripts/architecture.test.mjs scripts/local-publisher.test.mjs scripts/image-presentation.test.mjs",
     "check": "npm run validate:content && npm test && npm run build"
   },
   "dependencies": {

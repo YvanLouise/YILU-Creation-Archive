@@ -89,7 +89,7 @@ export function CollectionPage({ eyebrow, title, intro, items, kind, queryString
                 : `#/notes/${item.slug}`;
           return (
             <a className="archive-card" href={href} key={item.slug}>
-              <SiteImage src={item.cover} alt="" wrapperClassName="archive-card-image" />
+              <SiteImage src={item.cover} presentation={item.coverPresentation} alt="" wrapperClassName="archive-card-image" />
               <div>
                 <span>{kind === "work" ? item.status : item.date}</span>
                 <h2>{item.title}</h2>

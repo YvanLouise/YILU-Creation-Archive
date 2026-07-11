@@ -95,6 +95,7 @@ export function WorkPage({ content, work }) {
         <ProtectedImage
           wrapperClassName="work-cover-viewer"
           src={work.cover}
+          presentation={work.coverPresentation}
           alt={`${work.title}封面`}
           caption={`${work.title}封面`}
         />
@@ -136,6 +137,7 @@ export function WorkPage({ content, work }) {
               >
                 <SiteImage
                   src={chapter.cover || work.cover}
+                  presentation={chapter.coverPresentation || work.coverPresentation}
                   alt=""
                   wrapperClassName="chapter-cover-thumb"
                 />
@@ -166,6 +168,7 @@ export function WorkPage({ content, work }) {
                   >
                     <SiteImage
                       src={chapter.cover || work.cover}
+                      presentation={chapter.coverPresentation || work.coverPresentation}
                       alt=""
                       wrapperClassName="chapter-cover-thumb"
                     />
@@ -201,7 +204,7 @@ export function WorkPage({ content, work }) {
               href={`#/characters/${character.slug}`}
               key={character.slug}
             >
-              <SiteImage src={character.cover} alt="" />
+              <SiteImage src={character.cover} presentation={character.coverPresentation} alt="" />
               <span>{character.title}</span>
             </a>
           ))}

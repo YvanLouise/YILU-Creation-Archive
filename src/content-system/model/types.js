@@ -1,7 +1,7 @@
 /**
  * @typedef {Object} SiteConfig
  * @property {{name: string, subtitle: string, email: string, url?: string}} brand
- * @property {{name: string, intro: string, avatar?: string}} author
+ * @property {{name: string, intro: string, avatar?: string, avatarPresentation?: ImagePresentation}} author
  * @property {string} featuredWorkSlug
  * @property {"createdAt"|"date"} updatesSortMode
  * @property {Array<{label: string, value: string}>} stats
@@ -17,6 +17,7 @@
  * @property {string} subtitle
  * @property {string} description
  * @property {string} cover
+ * @property {ImagePresentation} [coverPresentation]
  * @property {string[]} genre
  * @property {string} [workCategory]
  * @property {string} status
@@ -44,15 +45,16 @@
  * @property {string} [volume]
  * @property {Array<{id: string, title: string, order: number, body: string, anchor: string}>} [sections]
  * @property {string} [cover]
+ * @property {ImagePresentation} [coverPresentation]
  * @property {string} [role]
  * @property {string} [affiliation]
  * @property {string} [profileStatus]
  * @property {string[]} [aliases]
  * @property {string[]} [traits]
- * @property {Array<{name: string, description: string, image?: string}>} [abilities]
+ * @property {Array<{name: string, description: string, image?: string, imagePresentation?: ImagePresentation}>} [abilities]
  * @property {Array<{label: string, description: string}>} [timeline]
  * @property {Array<{characterSlug: string, label: string, description: string}>} [relationships]
- * @property {Array<{label: string, image: string}>} [gallery]
+ * @property {Array<{label: string, image: string, imagePresentation?: ImagePresentation}>} [gallery]
  * @property {string} [path]
  */
 
@@ -62,6 +64,7 @@
  * @property {string} title
  * @property {string} summary
  * @property {string} image
+ * @property {ImagePresentation} [imagePresentation]
  * @property {string} category
  * @property {string} series
  * @property {string} date
@@ -69,6 +72,10 @@
  * @property {"draft"|"published"} status
  * @property {boolean} featured
  * @property {string} [path]
+ */
+
+/**
+ * @typedef {{focusX: number, focusY: number, zoom: number}} ImagePresentation
  */
 
 /**

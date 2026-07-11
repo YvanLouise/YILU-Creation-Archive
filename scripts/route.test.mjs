@@ -421,3 +421,60 @@ test("renders novel volumes and section anchors only when enabled", async () => 
     await server.close();
   }
 });
+
+test("renders novel enhanced text formats on reader pages", async () => {
+  const work = createWork({
+    slug: "formatted-novel",
+    title: "增强格式测试",
+  });
+  const content = createContent({
+    site: {
+      ...createContent().site,
+      featuredWorkSlug: "formatted-novel",
+    },
+    works: [work],
+    chapters: [createMarkdownItem({
+      slug: "formatted-chapter",
+      work: "formatted-novel",
+      title: "特殊叙事",
+      body: [
+        "普通文字 ~~删除线~~ ==重点== {{hide:隐藏真相}} {{blur:模糊字句}} {{thought:心里的声音}} {{aside:旁白注释}}",
+        "",
+        ":::notice 提示",
+        "门后传来两次敲击。",
+        ":::",
+        "",
+        ":::letter 来信",
+        "请在月升后拆开。",
+        ":::",
+      ].join("\n"),
+    })],
+  });
+
+  const server = await createServer({
+    configFile: "vite.config.js",
+    logLevel: "silent",
+    server: { middlewareMode: true },
+  });
+  try {
+    const { PublicRouter } = await server.ssrLoadModule("/src/site/router/PublicRouter.jsx");
+    const html = renderToString(React.createElement(PublicRouter, {
+      content,
+      route: "/works/formatted-novel/chapters/formatted-chapter",
+      navigationType: "load",
+    }));
+    assert.match(html, /novel-fx-strike/);
+    assert.match(html, /novel-fx-mark/);
+    assert.match(html, /novel-fx-hidden/);
+    assert.doesNotMatch(html, /隐藏真相/);
+    assert.match(html, /novel-fx-blur/);
+    assert.match(html, /novel-fx-thought/);
+    assert.match(html, /novel-fx-aside/);
+    assert.match(html, /novel-fx-notice/);
+    assert.match(html, /门后传来两次敲击。/);
+    assert.match(html, /novel-fx-letter/);
+    assert.match(html, /请在月升后拆开。/);
+  } finally {
+    await server.close();
+  }
+});

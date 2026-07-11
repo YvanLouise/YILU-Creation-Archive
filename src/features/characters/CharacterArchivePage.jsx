@@ -10,7 +10,7 @@ import { SiteImage } from "../../site/interaction/SiteImage.jsx";
 
 function CharacterPortrait({ character }) {
   return character.cover
-    ? <SiteImage src={character.cover} alt={`${character.title}角色肖像`} />
+    ? <SiteImage src={character.cover} presentation={character.coverPresentation} alt={`${character.title}角色肖像`} />
     : <span aria-hidden="true">{character.title.slice(0, 1)}</span>;
 }
 

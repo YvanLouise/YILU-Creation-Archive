@@ -28,6 +28,15 @@ test("frontmatter round trip", () => {
   assert.equal(parsed.body, "# 正文");
 });
 
+test("frontmatter preserves image presentation objects", () => {
+  const presentation = { focusX: 42, focusY: 63, zoom: 1.35 };
+  const source = stringifyMarkdownFile({
+    title: "裁切测试", slug: "crop-test", summary: "", date: "2026-07-11",
+    status: "draft", order: 1, coverPresentation: presentation,
+  }, "# 正文");
+  assert.deepEqual(parseMarkdownFile(source).meta.coverPresentation, presentation);
+});
+
 test("note frontmatter library fields round trip", () => {
   const source = stringifyMarkdownFile({
     title: "笔记",

@@ -92,7 +92,7 @@ export function NotesPage({ content, queryString = "" }) {
             <a className="note-card" href={`#/notes/${note.slug}`} key={note.slug}>
               <div className="note-card-cover">
                 {note.cover ? (
-                  <SiteImage src={note.cover} alt="" />
+                  <SiteImage src={note.cover} presentation={note.coverPresentation} alt="" />
                 ) : (
                   <NotebookPen size={34} />
                 )}

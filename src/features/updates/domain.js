@@ -30,6 +30,7 @@ function updateDocument(item, {
   kindLabel,
   href,
   image = "",
+  imagePresentation,
   work = null,
 }) {
   return {
@@ -44,6 +45,7 @@ function updateDocument(item, {
     order: item.order || 0,
     href,
     image: image || work?.cover || "",
+    imagePresentation: imagePresentation || work?.coverPresentation,
     workTitle: work?.title || "",
     workType: work?.type || "",
   };
@@ -61,6 +63,7 @@ export function buildUpdateDocuments(content) {
     kindLabel: work.type,
     href: `#/works/${work.slug}`,
     image: work.cover,
+    imagePresentation: work.coverPresentation,
   }));
 
   for (const chapter of publishedItemsForVisibleWorks(content.chapters, index)) {
@@ -72,6 +75,7 @@ export function buildUpdateDocuments(content) {
       kindLabel: isComic ? "漫画话数" : "小说章节",
       href: `#/works/${work.slug}/chapters/${chapter.slug}`,
       image: chapter.cover,
+      imagePresentation: chapter.coverPresentation,
       work,
     }));
   }
@@ -84,6 +88,7 @@ export function buildUpdateDocuments(content) {
       kindLabel: "角色",
       href: `#/characters/${character.slug}`,
       image: character.cover,
+      imagePresentation: character.coverPresentation,
       work,
     }));
   }
@@ -98,6 +103,7 @@ export function buildUpdateDocuments(content) {
       kindLabel: "创作笔记",
       href: `#/notes/${note.slug}`,
       image: note.cover,
+      imagePresentation: note.coverPresentation,
       work: relatedWork,
     }));
   }
@@ -108,6 +114,7 @@ export function buildUpdateDocuments(content) {
       kindLabel: "插画",
       href: "#/illustrations",
       image: illustration.image,
+      imagePresentation: illustration.imagePresentation,
     }));
   }
   return documents;

@@ -7,6 +7,7 @@ import {
   markdownMetaSchema,
 } from "./schema.js";
 import { normalizeAssetPath, normalizeMarkdownImagePaths } from "./assetPaths.js";
+import { normalizeImagePresentation } from "../../shared/imagePresentation.js";
 import {
   normalizeChapterStructureFields,
   normalizeWorkStructure,
@@ -34,7 +35,13 @@ export function normalizeWork(work) {
         workCategory: "",
         ...work,
       };
-  const withAssets = { ...normalized, cover: normalizeAssetPath(normalized.cover) };
+  const withAssets = {
+    ...normalized,
+    cover: normalizeAssetPath(normalized.cover),
+    ...(normalized.coverPresentation === undefined
+      ? {}
+      : { coverPresentation: normalizeImagePresentation(normalized.coverPresentation) }),
+  };
   workSchema.parse(withAssets);
   return withAssets;
 }
@@ -44,6 +51,9 @@ export function normalizeMarkdownItem(item) {
   const normalized = {
     ...item,
     cover: item.cover === undefined ? item.cover : normalizeAssetPath(item.cover),
+    ...(item.coverPresentation === undefined
+      ? {}
+      : { coverPresentation: normalizeImagePresentation(item.coverPresentation) }),
     body: normalizeMarkdownImagePaths(item.body),
     sections: item.sections.map((section) => ({
       ...section,
@@ -70,14 +80,23 @@ export function normalizeCharacter(character) {
   const withAssets = {
     ...normalized,
     cover: normalizeAssetPath(normalized.cover),
+    ...(normalized.coverPresentation === undefined
+      ? {}
+      : { coverPresentation: normalizeImagePresentation(normalized.coverPresentation) }),
     body: normalizeMarkdownImagePaths(normalized.body),
     abilities: normalized.abilities.map((ability) => ({
       ...ability,
       image: normalizeAssetPath(ability.image),
+      ...(ability.imagePresentation === undefined
+        ? {}
+        : { imagePresentation: normalizeImagePresentation(ability.imagePresentation) }),
     })),
     gallery: normalized.gallery.map((image) => ({
       ...image,
       image: normalizeAssetPath(image.image),
+      ...(image.imagePresentation === undefined
+        ? {}
+        : { imagePresentation: normalizeImagePresentation(image.imagePresentation) }),
     })),
   };
   markdownMetaSchema.parse(withAssets);
@@ -95,6 +114,9 @@ export function normalizeNote(note) {
   const withAssets = {
     ...normalized,
     cover: normalized.cover === undefined ? normalized.cover : normalizeAssetPath(normalized.cover),
+    ...(normalized.coverPresentation === undefined
+      ? {}
+      : { coverPresentation: normalizeImagePresentation(normalized.coverPresentation) }),
     body: normalizeMarkdownImagePaths(normalized.body),
   };
   markdownMetaSchema.parse(withAssets);
@@ -112,6 +134,9 @@ export function normalizeIllustration(illustration) {
   const withAssets = {
     ...normalized,
     image: normalizeAssetPath(normalized.image),
+    ...(normalized.imagePresentation === undefined
+      ? {}
+      : { imagePresentation: normalizeImagePresentation(normalized.imagePresentation) }),
   };
   illustrationSchema.parse(withAssets);
   return withAssets;
@@ -124,6 +149,9 @@ export function normalizeContent(content) {
     author: {
       ...content.site.author,
       avatar: normalizeAssetPath(content.site.author?.avatar),
+      ...(content.site.author?.avatarPresentation === undefined
+        ? {}
+        : { avatarPresentation: normalizeImagePresentation(content.site.author.avatarPresentation) }),
     },
   };
   siteConfigSchema.parse(normalizedSite);

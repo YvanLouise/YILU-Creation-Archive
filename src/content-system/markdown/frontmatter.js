@@ -3,12 +3,13 @@ function parseScalar(raw) {
   if (value === "true") return true;
   if (value === "false") return false;
   if (/^-?\d+(?:\.\d+)?$/.test(value)) return Number(value);
-  if (value.startsWith("[") && value.endsWith("]")) {
+  if ((value.startsWith("[") && value.endsWith("]")) || (value.startsWith("{") && value.endsWith("}"))) {
     try {
       return JSON.parse(value);
     } catch {
       // Keep supporting the existing lightweight unquoted array syntax.
     }
+    if (value.startsWith("{")) return value;
     return value
       .slice(1, -1)
       .split(",")
@@ -41,6 +42,7 @@ function stringifyScalar(value) {
       ? JSON.stringify(value)
       : `[${value.join(", ")}]`;
   }
+  if (value && typeof value === "object") return JSON.stringify(value);
   if (typeof value === "boolean" || typeof value === "number") return String(value);
   return String(value ?? "").replaceAll("\n", " ");
 }
@@ -71,6 +73,7 @@ export function stringifyMarkdownFile(meta, body) {
     "tags",
     "pinned",
     "cover",
+    "coverPresentation",
   ];
   const keys = [
     ...preferredOrder.filter((key) => Object.hasOwn(meta, key)),

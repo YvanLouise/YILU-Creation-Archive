@@ -25,7 +25,7 @@ import { SiteImage } from "../../site/interaction/SiteImage.jsx";
 
 function CharacterPortrait({ character }) {
   return character.cover
-    ? <SiteImage src={character.cover} alt={`${character.title}角色肖像`} />
+    ? <SiteImage src={character.cover} presentation={character.coverPresentation} alt={`${character.title}角色肖像`} />
     : <span aria-hidden="true">{character.title.slice(0, 1)}</span>;
 }
 
@@ -85,6 +85,7 @@ export function CharacterPage({ content, character }) {
           {character.cover ? (
             <ProtectedImage
               src={character.cover}
+              presentation={character.coverPresentation}
               alt={`${character.title}角色肖像`}
               caption={`${characterArchiveId(character)} · 人物肖像记录`}
               items={portraitImages}
@@ -198,7 +199,7 @@ export function CharacterPage({ content, character }) {
                   {abilities.map((ability, index) => (
                     <article key={`${ability.name}-${index}`}>
                       <div className="character-ability-icon">
-                        {ability.image ? <SiteImage src={ability.image} alt="" /> : <Sparkles size={18} />}
+                        {ability.image ? <SiteImage src={ability.image} presentation={ability.imagePresentation} alt="" /> : <Sparkles size={18} />}
                       </div>
                       <div><h3>{ability.name}</h3><p>{ability.description}</p></div>
                     </article>
@@ -238,6 +239,7 @@ export function CharacterPage({ content, character }) {
               <figure key={`${image.label}-${index}`}>
                 <ProtectedImage
                   src={image.image}
+                  presentation={image.imagePresentation}
                   alt={`${character.title}${image.label || "设定图"}`}
                   caption={image.label || `档案影像 ${index + 1}`}
                   items={galleryImages}
