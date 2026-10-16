@@ -10,7 +10,7 @@ export default function App() {
   useRouteScroll(route, query, anchor, navigationType);
   return (
     <ErrorBoundary>
-      <PublicRouter content={initialContent} route={route} query={query} navigationType={navigationType} />
+      <PublicRouter content={initialContent} route={route} query={query} />
     </ErrorBoundary>
   );
 }

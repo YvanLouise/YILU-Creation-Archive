@@ -86,12 +86,52 @@ img { display: block; max-width: 100%; }
   will-change: opacity, transform;
 }
 
-.public-experience.is-transitioning .route-progress-line {
-  animation: route-progress var(--motion-slow) var(--ease-out-quart) both;
+html { view-transition-name: none; }
+
+.route-page-stage { view-transition-name: route-page; }
+
+html[data-route-motion] {
+  --route-in-x: 0px;
+  --route-in-y: 12px;
+  --route-out-x: 0px;
+  --route-out-y: -4px;
 }
 
-.public-experience.is-transitioning .route-page-stage {
-  animation: paper-page-enter var(--motion-slow) var(--ease-out-quart) both;
+html[data-route-motion="forward"] {
+  --route-in-x: 18px;
+  --route-in-y: 0px;
+  --route-out-x: -8px;
+  --route-out-y: 0px;
+}
+
+html[data-route-motion="backward"] {
+  --route-in-x: -18px;
+  --route-in-y: 0px;
+  --route-out-x: 8px;
+  --route-out-y: 0px;
+}
+
+html[data-route-motion] .route-progress-line {
+  animation: route-progress 340ms var(--ease-out-quart) both;
+}
+
+html[data-route-motion="history"] .route-progress-line { animation: none; }
+
+::view-transition { pointer-events: none; }
+::view-transition-group(route-page) { animation: none; }
+::view-transition-image-pair(route-page) { isolation: isolate; }
+::view-transition-old(route-page),
+::view-transition-new(route-page) {
+  height: 100%;
+  object-fit: none;
+  object-position: top center;
+  mix-blend-mode: normal;
+}
+::view-transition-old(route-page) {
+  animation: route-page-out 140ms ease-out both;
+}
+::view-transition-new(route-page) {
+  animation: route-page-in 300ms cubic-bezier(.22, 1, .36, 1) 40ms both;
 }
 
 @keyframes route-progress {
@@ -100,9 +140,13 @@ img { display: block; max-width: 100%; }
   100% { opacity: 0; transform: scaleX(1); }
 }
 
-@keyframes paper-page-enter {
-  from { opacity: 0; }
-  to { opacity: 1; }
+@keyframes route-page-out {
+  to { opacity: 0; transform: translate3d(var(--route-out-x), var(--route-out-y), 0); }
+}
+
+@keyframes route-page-in {
+  from { opacity: 0; transform: translate3d(var(--route-in-x), var(--route-in-y), 0); }
+  to { opacity: 1; transform: none; }
 }
 
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
@@ -2078,10 +2122,10 @@ html.reading-position-is-restoring body {
 }
 
 .markdown-body .novel-fx-hidden {
-  min-width: 4.8em;
-  min-height: 1.45em;
-  margin: 0 .12em;
-  padding: 0 .55em;
+  width: calc(var(--hidden-text-length, 1) * 1em);
+  min-height: 1.2em;
+  margin: 0 .04em;
+  padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2092,21 +2136,16 @@ html.reading-position-is-restoring body {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
   cursor: pointer;
   font: inherit;
+  line-height: inherit;
+  white-space: pre;
   vertical-align: baseline;
 }
 
-.markdown-body .novel-fx-hidden::after {
-  content: "点击展开";
-  color: rgba(255, 255, 255, .72);
-  font: 11px/1 "Microsoft YaHei UI", sans-serif;
-}
-
 .markdown-body .novel-fx-hidden.revealed {
+  width: auto;
   background: color-mix(in srgb, var(--reader-accent, #175a51) 10%, transparent);
   color: inherit;
 }
-
-.markdown-body .novel-fx-hidden.revealed::after { content: ""; }
 
 .markdown-body .novel-fx-blur {
   filter: blur(3px);
@@ -4606,6 +4645,10 @@ html.reading-position-is-restoring body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .route-page-stage { view-transition-name: none; }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
   *, *::before, *::after {
     scroll-behavior: auto !important;
     animation-duration: .01ms !important;

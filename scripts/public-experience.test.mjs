@@ -9,6 +9,7 @@ import {
   workTypeHref,
 } from "../src/site/interaction/filters.js";
 import {
+  createLightboxState,
   entityKey,
   normalizeArchiveState,
   normalizeLightboxItems,
@@ -94,4 +95,22 @@ test("lightbox groups discard invalid sources and normalize labels", () => {
     { src: "one.webp", alt: "第一张" },
     { src: "", alt: "缺失" },
   ]), [{ src: "one.webp", alt: "第一张", caption: "第一张" }]);
+});
+
+test("lightbox state rejects empty groups and clamps invalid indexes", () => {
+  assert.equal(createLightboxState([], 0), null);
+  assert.deepEqual(createLightboxState([
+    { src: "one.webp", alt: "第一张" },
+    { src: "two.webp", caption: "第二张" },
+  ], 99), {
+    items: [
+      { src: "one.webp", alt: "第一张", caption: "第一张" },
+      { src: "two.webp", alt: "", caption: "第二张" },
+    ],
+    index: 1,
+    trigger: null,
+    scale: 1,
+    x: 0,
+    y: 0,
+  });
 });

@@ -144,7 +144,9 @@ export function Footer({ site }) {
         </div>
         <div>
           <strong>站点</strong>
-          {navItems.map((item) => <a href={item.href} key={item.href}>{item.label}</a>)}
+          <div className="footer-site-links">
+            {navItems.map((item) => <a href={item.href} key={item.href}>{item.label}</a>)}
+          </div>
         </div>
         <div>
           <strong>联系</strong>

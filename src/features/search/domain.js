@@ -128,9 +128,13 @@ export function buildSearchDocuments(content) {
   ];
 }
 
-export function scoreSearchDocument(document, query, tokens = tokenizeQuery(query)) {
+export function scoreSearchDocument(
+  document,
+  query,
+  tokens = tokenizeQuery(query),
+  normalizedQuery = normalizeSearchText(query),
+) {
   if (!tokens.length || !tokens.every((token) => document.searchText.includes(token))) return -1;
-  const normalizedQuery = normalizeSearchText(query);
   let score = 0;
   if (document.titleText === normalizedQuery) score += 1000;
   if (tokens.every((token) => document.titleText.includes(token))) score += 500;
@@ -150,9 +154,13 @@ function compareDateDescending(left, right) {
 export function searchDocuments(documents, query, type = "all") {
   const tokens = tokenizeQuery(query);
   if (!tokens.length) return [];
+  const normalizedQuery = normalizeSearchText(query);
   return documents
     .filter((document) => type === "all" || document.kind === type)
-    .map((document) => ({ ...document, score: scoreSearchDocument(document, query, tokens) }))
+    .map((document) => ({
+      ...document,
+      score: scoreSearchDocument(document, query, tokens, normalizedQuery),
+    }))
     .filter((document) => document.score >= 0)
     .sort((left, right) =>
       right.score - left.score ||

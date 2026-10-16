@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import {
   archiveStorageKey,
+  createLightboxState,
   normalizeArchiveState,
   recordRecentState,
   resolveArchiveEntry,
@@ -38,6 +39,7 @@ import { ContextActionMenuProvider } from "../../shared/components/ContextAction
 const PublicExperienceContext = createContext(null);
 const lightboxMinScale = 1;
 const lightboxMaxScale = 5;
+const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 function clampLightboxScale(value) {
   return Math.max(lightboxMinScale, Math.min(lightboxMaxScale, Number(value) || lightboxMinScale));
@@ -103,7 +105,6 @@ export function PublicExperienceProvider({
   content,
   route,
   query,
-  navigationType,
   children,
 }) {
   const [archiveState, setArchiveState] = useState(readArchiveState);
@@ -112,9 +113,7 @@ export function PublicExperienceProvider({
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [lightbox, setLightbox] = useState(null);
   const [notice, setNotice] = useState("");
-  const [transitioning, setTransitioning] = useState(false);
   const noticeTimerRef = useRef(0);
-  const transitionTimerRef = useRef(0);
   const chapterMatch = route.match(/^\/works\/([^/]+)\/chapters\/([^/]+)$/);
   const currentChapterWork = chapterMatch
     ? content.works.find((work) => work.slug === chapterMatch[1])
@@ -150,21 +149,12 @@ export function PublicExperienceProvider({
     setArchiveState((current) => recordRecentState(current, key));
   }, [route]);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     setArchiveOpen(false);
-    if (navigationType === "history" || routeEntityKey(route)?.startsWith("chapter:")) {
-      setTransitioning(false);
-      return undefined;
-    }
-    setTransitioning(true);
-    window.clearTimeout(transitionTimerRef.current);
-    transitionTimerRef.current = window.setTimeout(() => setTransitioning(false), 280);
-    return () => window.clearTimeout(transitionTimerRef.current);
-  }, [navigationType, query, route]);
+  }, [query, route]);
 
   useEffect(() => () => {
     window.clearTimeout(noticeTimerRef.current);
-    window.clearTimeout(transitionTimerRef.current);
   }, []);
 
   const overlayOpen = archiveOpen || navigationOpen || Boolean(lightbox);
@@ -194,6 +184,9 @@ export function PublicExperienceProvider({
     () => archiveState.recent.map((entry) => resolveArchiveEntry(content, entry)).filter(Boolean),
     [archiveState.recent, content],
   );
+  const openLightbox = useCallback((items, index = 0, trigger = null) => {
+    setLightbox(createLightboxState(items, index, trigger));
+  }, []);
   const value = useMemo(() => ({
     archiveOpen,
     closeArchive: () => setArchiveOpen(false),
@@ -206,7 +199,7 @@ export function PublicExperienceProvider({
       setArchiveTab(tab);
       setArchiveOpen(true);
     },
-    openLightbox: (items, index = 0, trigger = null) => setLightbox({ items, index, trigger, scale: 1, x: 0, y: 0 }),
+    openLightbox,
     routeKey: `${route}?${query}`,
     closeLightbox: () => setLightbox(null),
     setLightbox,
@@ -218,6 +211,7 @@ export function PublicExperienceProvider({
     lightbox,
     navigationOpen,
     notify,
+    openLightbox,
     query,
     route,
     isNovelReader,
@@ -230,7 +224,7 @@ export function PublicExperienceProvider({
       <ContextActionMenuProvider>
         <ContentProtection onNotice={notify}>
           <div
-            className={`public-experience${transitioning ? " is-transitioning" : ""}`}
+            className="public-experience"
             onClickCapture={(event) => {
               const link = event.target.closest?.("a[href^='#/']");
               if (link) markDirectNavigation();
@@ -324,6 +318,7 @@ function ProtectedLightbox({ lightbox, setLightbox }) {
   }, [lightbox?.index, lightbox?.items?.[lightbox?.index]?.src]);
   if (!lightbox) return null;
   const item = lightbox.items[lightbox.index];
+  if (!item) return null;
   const scale = lightbox.scale || 1;
   const offsetX = lightbox.x || 0;
   const offsetY = lightbox.y || 0;
@@ -465,20 +460,32 @@ function ProtectedLightbox({ lightbox, setLightbox }) {
 }
 
 function GlobalReadingTools({ hidden }) {
-  const [progress, setProgress] = useState(0);
-  const [visible, setVisible] = useState(false);
+  const [{ progress, visible }, setReadingState] = useState({ progress: 0, visible: false });
+  const frameRef = useRef(0);
   useEffect(() => {
     const update = () => {
+      frameRef.current = 0;
       const maximum = document.documentElement.scrollHeight - window.innerHeight;
-      setVisible(window.scrollY > 280);
-      setProgress(maximum > 0 ? Math.min(100, Math.round((window.scrollY / maximum) * 100)) : 0);
+      const nextVisible = window.scrollY > 280;
+      const nextProgress = maximum > 0
+        ? Math.min(100, Math.round((window.scrollY / maximum) * 100))
+        : 0;
+      setReadingState((current) => (
+        current.visible === nextVisible && current.progress === nextProgress
+          ? current
+          : { visible: nextVisible, progress: nextProgress }
+      ));
+    };
+    const scheduleUpdate = () => {
+      if (!frameRef.current) frameRef.current = window.requestAnimationFrame(update);
     };
     update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
     return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      window.cancelAnimationFrame(frameRef.current);
     };
   }, []);
   const shown = visible && !hidden;

@@ -154,3 +154,17 @@ export function normalizeLightboxItems(items) {
       caption: String(item.caption || item.alt || ""),
     }));
 }
+
+export function createLightboxState(items, index = 0, trigger = null) {
+  const normalizedItems = normalizeLightboxItems(items);
+  if (!normalizedItems.length) return null;
+  const requestedIndex = Number.isInteger(index) ? index : 0;
+  return {
+    items: normalizedItems,
+    index: Math.max(0, Math.min(requestedIndex, normalizedItems.length - 1)),
+    trigger,
+    scale: 1,
+    x: 0,
+    y: 0,
+  };
+}

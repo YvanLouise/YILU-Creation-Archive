@@ -91,10 +91,10 @@ function pageForMatch(content, query, match) {
   return <NotFoundPage />;
 }
 
-export function PublicRouter({ content, route, query = "", navigationType = "load" }) {
+export function PublicRouter({ content, route, query = "" }) {
   const page = pageForMatch(content, query, matchPublicRoute(route));
   return (
-    <PublicExperienceProvider content={content} route={route} query={query} navigationType={navigationType}>
+    <PublicExperienceProvider content={content} route={route} query={query}>
       <PublicLayout site={content.site} route={route}>
         {page}
       </PublicLayout>

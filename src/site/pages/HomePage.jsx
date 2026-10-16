@@ -15,36 +15,38 @@ export function HomePage({ content }) {
   const notes = resolveHomeNotes(content, 2);
   const stats = resolveHomeStats(content);
   return (
-    <main>
-      <section className="hero section-shell">
-        <div className="hero-copy">
-          <div className="section-label"><span />主推{work.type}</div>
-          <h1>{work.title}</h1>
-          <p className="hero-subtitle">{work.subtitle}</p>
-          <p className="hero-description">{work.description}</p>
-          <div className="button-row">
-            <ButtonLink href={`#/works/${work.slug}`}>
-              <BookOpen size={18} />开始阅读
-            </ButtonLink>
-            <ButtonLink
-              href={`#/works/${work.slug}#settings`}
-              variant="secondary"
-            >
-              查看设定
-            </ButtonLink>
+    <main className="home-page">
+      <section className="home-cover">
+        <div className="hero section-shell">
+          <div className="hero-copy">
+            <div className="section-label"><span />主推{work.type}</div>
+            <h1>{work.title}</h1>
+            {work.subtitle?.trim() ? <p className="hero-subtitle">{work.subtitle}</p> : null}
+            <p className="hero-description">{work.description}</p>
+            <div className="button-row">
+              <ButtonLink href={`#/works/${work.slug}`}>
+                <BookOpen size={18} />开始阅读
+              </ButtonLink>
+              <ButtonLink
+                href={`#/works/${work.slug}#settings`}
+                variant="secondary"
+              >
+                查看设定
+              </ButtonLink>
+            </div>
+            <dl className="work-meta">
+              <div><dt>当前进度</dt><dd>{work.progress}</dd></div>
+              <div><dt>类型</dt><dd>{work.genre.join(" · ")}</dd></div>
+              <div><dt>更新状态</dt><dd>{work.status}</dd></div>
+            </dl>
           </div>
-          <dl className="work-meta">
-            <div><dt>当前进度</dt><dd>{work.progress}</dd></div>
-            <div><dt>类型</dt><dd>{work.genre.join(" · ")}</dd></div>
-            <div><dt>更新状态</dt><dd>{work.status}</dd></div>
-          </dl>
-        </div>
-        <div className="hero-visual">
-          <SiteImage src={work.cover} presentation={work.coverPresentation} alt={`${work.title}主视觉`} priority />
-          <div className="cover-caption">
-            <span>ILU ORIGINAL STORY</span>
-            <strong>愿每一盏微光，都能照见被遗忘的名字。</strong>
-          </div>
+          <figure className="hero-visual">
+            <SiteImage src={work.cover} presentation={work.coverPresentation} alt={`${work.title}主视觉`} priority />
+            <figcaption className="cover-caption">
+              <strong>{work.title}</strong>
+              <span>{[work.type, ...work.genre].join(" · ")}</span>
+            </figcaption>
+          </figure>
         </div>
       </section>
 

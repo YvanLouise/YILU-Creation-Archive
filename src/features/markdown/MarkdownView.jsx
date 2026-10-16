@@ -6,15 +6,17 @@ const imagePattern = /^!\[([^\]]+)\]\(([^)]+)\)$/;
 
 function HiddenText({ text }) {
   const [open, setOpen] = useState(false);
+  const length = Math.max(1, Array.from(String(text || "")).length);
   return (
     <button
       className={open ? "novel-fx-hidden revealed" : "novel-fx-hidden"}
       type="button"
+      style={open ? undefined : { "--hidden-text-length": length }}
       aria-expanded={open}
       aria-label={open ? "隐藏文字已展开" : "展开隐藏文字"}
       onClick={() => setOpen((value) => !value)}
     >
-      {open ? text : "隐藏文字"}
+      {open ? text : "\u00a0".repeat(length)}
     </button>
   );
 }

@@ -25,6 +25,15 @@ export function useRouteScroll(route, query, anchor, navigationType) {
       return undefined;
     }
     const locationKey = `${route}${query ? `?${query}` : ""}`;
+    let scrollSaved = false;
+    const saveScroll = () => {
+      scrollSaved = true;
+      if (isRestorableListRoute(route)) {
+        sessionStorage.setItem(scrollStorageKey(locationKey), String(Math.max(0, Math.round(window.scrollY))));
+      }
+    };
+    // Capture before the route swaps DOM and the browser clamps its scroll offset.
+    window.addEventListener("hashchange", saveScroll, { capture: true });
     const restoredTop = restoredListScrollTop(
       navigationType,
       route,
@@ -47,9 +56,8 @@ export function useRouteScroll(route, query, anchor, navigationType) {
       root.style.scrollBehavior = previousScrollBehavior;
     }, 120);
     return () => {
-      if (isRestorableListRoute(route)) {
-        sessionStorage.setItem(scrollStorageKey(locationKey), String(Math.max(0, Math.round(window.scrollY))));
-      }
+      window.removeEventListener("hashchange", saveScroll, { capture: true });
+      if (!scrollSaved) saveScroll();
       window.cancelAnimationFrame(frame);
       window.clearTimeout(timer);
       window.clearTimeout(restoreTimer);

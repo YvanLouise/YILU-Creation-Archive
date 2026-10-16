@@ -466,6 +466,7 @@ test("renders novel enhanced text formats on reader pages", async () => {
     assert.match(html, /novel-fx-strike/);
     assert.match(html, /novel-fx-mark/);
     assert.match(html, /novel-fx-hidden/);
+    assert.match(html, /--hidden-text-length:4/);
     assert.doesNotMatch(html, /隐藏真相/);
     assert.match(html, /novel-fx-blur/);
     assert.match(html, /novel-fx-thought/);

@@ -28,12 +28,17 @@ export function ProtectedImage({
   const presentationStyle = hasPresentation ? imagePresentationStyle(presentation) : undefined;
   const [autoRevealed, setAutoRevealed] = useState(false);
   const isRevealed = reveal ?? autoRevealed;
-  const normalizedItems = (items?.length ? items : [{ src, alt, caption }]).map((item) => ({
-    ...item,
-    src: normalizeAssetPath(item.src),
-  }));
-  const group = normalizeLightboxItems(normalizedItems);
   const canOpenLightbox = showLightboxButton && experience?.openLightbox;
+  const openLightbox = (event) => {
+    if (!canOpenLightbox) return;
+    const group = items?.length
+      ? items.map((item) => ({
+          ...item,
+          src: normalizeAssetPath(item.src),
+        }))
+      : normalizeLightboxItems([{ src: imageSrc, alt, caption }]);
+    experience.openLightbox(group, index, event.currentTarget);
+  };
 
   useEffect(() => {
     if (!progressive || reveal !== undefined) return undefined;
@@ -89,7 +94,7 @@ export function ProtectedImage({
           <button
             type="button"
             aria-label={`沉浸查看${caption || alt || "图片"}`}
-            onClick={(event) => experience.openLightbox(group, index, event.currentTarget)}
+            onClick={openLightbox}
           >
             <Maximize2 size={16} />
             <span>查看</span>
@@ -119,7 +124,7 @@ export function ProtectedImage({
       <button
         type="button"
         aria-label={`沉浸查看${caption || alt || "图片"}`}
-        onClick={(event) => experience.openLightbox(group, index, event.currentTarget)}
+        onClick={openLightbox}
       >
         <Maximize2 size={16} />
         <span>查看</span>

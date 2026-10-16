@@ -60,8 +60,10 @@ export function SearchPage({ content, queryString }) {
     [deferredQuery, documents],
   );
   const results = useMemo(
-    () => searchDocuments(documents, deferredQuery, type),
-    [deferredQuery, documents, type],
+    () => type === "all"
+      ? allResults
+      : allResults.filter((result) => result.kind === type),
+    [allResults, type],
   );
 
   useEffect(() => {
